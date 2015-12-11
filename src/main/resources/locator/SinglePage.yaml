@@ -1,0 +1,21 @@
+H5Load:
+  type:xpath
+  value:"html/body/div[1]/div[2]/p"
+SinglePageLoad:
+  type:xpath
+  value:".//*[@id='product']/a"
+GoodName:
+  type:xpath
+  value:".//*[@id='scroller']/div[4]/div[1]/a"
+GoodPrice:
+  type:xpath
+  value:".//*[@id='scroller']/div[4]/div[2]/span"
+GoodNoEvalute:
+  type:xpath
+  value:".//*[@id='scroller']/div[8]/div[2]"
+goodEvaluateTitle:
+  type:xpath
+  value:".//*[@id='scroller']/div[8]/div[1]" 
+goodEvaluate:
+  type:xpath
+  value:".//*[@id='scroller']/div[8]/div[1]/div[4]/a"

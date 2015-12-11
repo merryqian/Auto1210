@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+	<common>	
+	</common>s
+	<singlePageLoad>
+	    <productID>productid=87777</productID>
+	</singlePageLoad>
+	
+	<goodName>
+	    <productID>productid=87777</productID>
+	</goodName>
+	<goodPrice>
+	    <productID>productid=87777</productID>
+	</goodPrice>
+    <goodNoEvaluate>
+        <productID>productid=87777</productID>
+    </goodNoEvaluate>
+    <goodEvaluate>
+         <productID>productid=87846</productID>
+    </goodEvaluate>
+	
+</data>

@@ -1,0 +1,19 @@
+location:
+  type:xpath
+  value:".//*[@id='main']/div/section[4]/div/div/a[3]/img"
+login:
+  type:xpath
+  value:".//*[@id='main']/div/section[5]/div/a[contains(text(),'登录之后')]"
+username:
+  type:id
+  value:lgoinName
+password:
+  type:id
+  value:pwd
+loginButton:
+  type:id
+  value:loginButton
+
+
+
+  
