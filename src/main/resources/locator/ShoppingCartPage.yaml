@@ -1,0 +1,42 @@
+search:
+  type:xpath
+  value:".//*[@id='main']/div/header/div"
+keySearch:
+  type:id
+  value:Keyserarch
+keywordList:
+  type:id
+  value:keywordslist
+goodList:
+  type:xpath
+  value:".//*[@id='goodslist']/li[1]"
+noGoods:
+  type:xpath
+  value:".//*[@id='goodslist']/div[2]"
+addButtonList:
+  type:xpath
+  value:".//*[@id='goodslist']/li[1]/div/a"
+addSuccess:
+  type:xpath
+  value:"html/body/div[4]"
+fastBar:
+  type:xpath
+  value:".//*[@id='main']/div[1]/div/a/span"
+shoppingcart:
+  type:xpath
+  value:".//*[@id='main']/div[1]/div/nav/ul/li[4]/a/p"
+submitBtn:
+  type:id
+  value:submitBtn
+addButton:
+  type:id
+  value:addButton
+singleFastBar:
+  type:xpath
+  value:"html/body/div[1]/div[2]/a/span"
+singleAddSuccess:
+  type:xpath
+  value:".//*[@id='main']/div[3]"
+shoppingcartSingle:
+  type:xpath
+  value:"html/body/div[1]/div[2]/nav/ul/li[4]/a/p"

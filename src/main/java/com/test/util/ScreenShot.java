@@ -33,7 +33,7 @@ public class ScreenShot {
         String screenPath = dir.getAbsolutePath() + "/" + screenName;
         this.takeScreenshot(screenPath);       
     }
-    public  void snapshot(TakesScreenshot drivername, String snapshotTime,String foldername,String filename) {
+    public  void snapshot(TakesScreenshot drivername, String snapshotTime,String foldername,String filename,String testcaseName) {
 		// this method will take screen shot ,require two parameters ,one is
 		// driver name, another is file name
        
@@ -45,8 +45,8 @@ public class ScreenShot {
 		try {
 			System.out.println("save snapshot path is:" + currentPath + "/"
 					+ filename + ".jpg");
-			FileUtils.copyFile(scrFile, new File(currentPath +"\\"+ "screenshot"+"\\"+snapshotTime+"\\" +foldername+ "\\"+filename
-					+ ".jpg"));
+			FileUtils.copyFile(scrFile, new File(currentPath +"\\"+ "screenshot"+"\\"+snapshotTime+"\\" 
+					+foldername+ "\\"+filename+"\\"+testcaseName+ ".jpg"));
 		} catch (IOException e) {
 			System.out.println("Can't save screenshot");
 			e.printStackTrace();

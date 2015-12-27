@@ -1,18 +1,42 @@
 location:
   type:xpath
-  value:".//*[@id='main']/div/section[4]/div/div/a[3]/img"
-login:
+  value:".//*[@id='mySwipe2']/div/div/a/img"
+loginEntrance:
   type:xpath
-  value:".//*[@id='main']/div/section[5]/div/a[contains(text(),'登录之后')]"
-username:
+  value:".//*[@id='main']/div/section[4]/div/a"
+logo:
+  type:xpath
+  value:"html/body/main/div[1]/a/img"
+userName:
   type:id
   value:lgoinName
 password:
   type:id
   value:pwd
+forgetPassword:
+  type:xpath
+  value:"html/body/main/div[2]/div[4]/div[1]/a"
+forgetPasswordText:
+  type:xpath
+  value:"html/body/header/h2"
+freeRegister:
+  type:xpath
+  value:"html/body/main/div[2]/div[4]/div[2]/a"
+solidButton:
+  type:xpath
+  value:"html/body/main/div[2]/div[5]/a"
+solidClick:
+  type:xpath
+  value:"html/body/main/div[2]/div[5]/a/span"
+solidLoginTitle:
+  type:xpath
+  value:"html/body/header/h2"
 loginButton:
   type:id
   value:loginButton
+wrongAlert:
+  type:xpath
+  value:"html/body/div[1]"
 
 
 

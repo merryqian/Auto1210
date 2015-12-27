@@ -3,9 +3,16 @@
 	<common>	
 	http://m.st.bl.com/h5-web/page/view_Index.html			
 	</common>
-	<loginBlemall>
-		<username>18516042869</username>
-		<password>donkey1987</password>
-	</loginBlemall>
-
+	<wrongPasswordAlert>
+	    <username>18516042869</username>
+	    <password>435345</password>
+	</wrongPasswordAlert>
+	<usernameNotExist>
+	     <username>1851604200</username>
+	    <password>435345</password>
+	</usernameNotExist>
+	<loginSuccess>
+	    <username>18516042869</username>
+	    <password>wobugaosuni1</password> 
+	</loginSuccess>
 </data>

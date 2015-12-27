@@ -15,7 +15,7 @@ public class TimeString {
 		return (str.length() == len) ? (str) : (string + str);
 	}
 	/**
-	 * 返回当前时间，格式为�?2014-12-18 15:11:50
+	 * 返回当前时间，格式为�?2014-12-18 15:11:50
 	 * @return
 	 */
 	public String getSimpleDateFormat(){
@@ -24,7 +24,7 @@ public class TimeString {
 	}	
 	
 	/**
-	 * 返回当前时间�?
+	 * 返回当前时间�?
 	 * @return
 	 */
 //	public String getTime(){
@@ -32,7 +32,7 @@ public class TimeString {
 //	}
 	
 	/**
-	 * 生成�?个长度为17的时间字符串，精确到毫秒
+	 * 生成�?个长度为17的时间字符串，精确到毫秒
 	 * @return
 	 */
 	
