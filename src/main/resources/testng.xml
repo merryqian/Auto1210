@@ -4,11 +4,9 @@
 <suite name="H5AutoTest" >
 	<test verbose="2" name="TestMethods">
 		<classes>
-			<class name="com.blemall.smokeTest.testcases.TestCase_ShoppingCart">
+			<class name="com.blemall.smokeTest.testcases.TestCase_04_CreateOrder">
 				<methods preserve-order="true">
-				     
-					<include name="addToCartFromSinglePage"/>
-					
+				     <include name="addAddress"/>
 				</methods>
 			</class>
 		</classes>

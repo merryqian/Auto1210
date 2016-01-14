@@ -20,7 +20,7 @@ import com.test.util.Log;
 import com.test.util.ScreenShot;
 import com.test.util.TimeString;
 
-public class TestCase_SinglePage extends TestBase {
+public class TestCase_02_SinglePage extends TestBase {
    String excelPath = "D:\\code\\H5\\TestCase\\H5_SingleProduct.xlsx";
    String sheetName = "SingleProduct";
    ExcelReader reader = new ExcelReader(excelPath, sheetName);

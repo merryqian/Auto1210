@@ -23,6 +23,7 @@ import com.test.bean.Config;
 import com.test.bean.Global;
 import com.test.bean.TestResult;
 import com.test.bean.TestngListener;
+import com.test.util.Log;
 import com.test.util.ParseXml;
 import com.test.util.TimeString;
 import com.test.util.Util;
@@ -97,6 +98,28 @@ public class TestBase{
 	{
 		return driver.getCurrentUrl();
 	}
+	public void wait(int waitTimes)
+	{
+		try{
+			Thread.sleep(waitTimes);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			Log.logError("设置等待时间出错");
+		}
+	}
+	 public boolean isElementEqual(String expected, String actual)
+	    {
+	    	if(expected.equals(actual))
+	    	{
+	    		Log.logInfo("预期的值与实际的值相等");
+	    		return true;
+	    	}
+	    	else{
+	    		Log.logInfo("预期的值与实际的值不相等");
+	    		return false;
+	    	}
+	    }
 	@BeforeMethod
 	public void setUp() {
 		System.out.println("BeforeMethod");
