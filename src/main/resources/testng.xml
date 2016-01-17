@@ -6,7 +6,7 @@
 		<classes>
 			<class name="com.blemall.smokeTest.testcases.TestCase_04_CreateOrder">
 				<methods preserve-order="true">
-				     <include name="addAddress"/>
+				     <include name="CODCheck"/>
 				</methods>
 			</class>
 		</classes>
