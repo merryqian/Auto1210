@@ -15,17 +15,227 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.blemall.smokeTest.page.ShoppingCartPage;
+import com.blemall.smokeTest.page.ToPayOrderPage;
 import com.test.base.TestBase;
 import com.test.bean.Config;
 import com.test.util.Log;
 
 public class TestCase_03_ShoppingCart extends TestBase {
+	// 将商品从“搜索列表页”加入购物车
+	@Test(dataProvider = "providerMethod")
+	public void addToCartFromSearch(Map<String, String> param)throws IOException {
+		ShoppingCartPage sp =new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		//登录
+		this.login(sp, param.get("username"), param.get("password"));
+		//如果购物车不为空，则清空购物车
+		this.initData(sp, param);
+		//再次进入首页
+		this.gotoFirstPage(sp);
+		// 调用搜索方法,并判断返回的结果是否为空
+		searchKey(param.get("searchKey"));
+		// 查找搜索结果，直到找到有库存的商品
+		String buttonXpath = findStockGoods();
+		// 调用加入购物车按钮
+		addToShoppingCartFromList(sp, buttonXpath);
+	}
+
+
+	// 将商品从详情页加入购物车
+	@Test(dataProvider = "providerMethod")
+	public void addToShopCart(Map<String, String> param) {
+		// 打开H5首页
+		openURL();
+		// 调用搜索方法
+		ShoppingCartPage sp = searchKey(param.get("searchKey"));
+		
+		// 查找有加入购物车按钮的商品
+		goToSinglePage(sp);
+		// 调用加入购物车的方法
+		addToShoppingCartFromSingle(sp);
+
+	}
+
+	// 单品页验证商品“库存不足”
+	@Test(dataProvider = "providerMethod")
+	public void noStockSinglePageConfirm(Map<String, String> param) {
+		// 打开H5首页
+		openURL();
+		// 调用搜索方法
+		ShoppingCartPage sp = searchKey(param.get("searchKey"));
+		
+		// 查找搜索结果，直到找到没有库存的商品
+		findNoStockGoods();
+		// 无货检查
+		noStockCheck(sp);
+
+	}
+
+	// 闪购商品展示
+	@Test(dataProvider = "providerMethod")
+	public void goodsShanGou(Map<String, String> param) throws IOException,InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		//登录
+		this.login(sp, param.get("username"), param.get("password"));
+		// 进入购物车页面
+		this.gotoShoppingCartCheckNull(sp);
+		//判断购物车中闪购商品展示的方法
+		this.checkShanGouInShoppingCart(sp);
+		
+	}
+
+	// 已下架商品展示
+	@Test(dataProvider = "providerMethod")
+	public void goodsXiaJia(Map<String, String> param) throws IOException,InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+		this.login(sp, param.get("username"), param.get("password"));
+		// 进入购物车页面
+		this.gotoShoppingCartCheckNull(sp);
+		//调用检查购物车中下架商品的展示
+		this.checkGoodsXiaJiaInShoppingCart(sp);
+		
+	}
+
+
+	// 购物车页面验证商品“库存不足”
+	@Test(dataProvider = "providerMethod")
+	public void noStockCheck(Map<String, String> param) throws IOException,InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+		this.login(sp, param.get("username"), param.get("password"));
+		// 进入购物车页面
+		this.gotoShoppingCartCheckNull(sp);
+		this.checkNoStock(sp);
+	}
+
+	// 购物车中编辑单个商品-删除商品
+	@Test(dataProvider = "providerMethod")
+	public void oneGoodsEditDelete(Map<String, String> param)throws IOException, InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+		this.login(sp, param.get("username"), param.get("password"));
+		// 进入购物车页面
+		this.gotoShoppingCartCheckNull(sp);
+		this.deleteOneGoods(sp);
+	}
+   
+
+	// 购物车中编辑单个商品-增加商品数量
+	@Test(dataProvider = "providerMethod")
+	public void oneGoodsEditAddNum(Map<String, String> param)throws IOException, InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+		this.login(sp, param.get("username"), param.get("password"));
+		// 进入购物车页面
+		this.gotoShoppingCartCheckNull(sp);
+		this.goodsEditAddNum(sp);
+	}
+		
+
+
+	// 购物车中编辑单个商品-减少商品数量
+	@Test(dataProvider = "providerMethod")
+	public void oneGoodsEditDeleteNum(Map<String, String> param)throws IOException, InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+		this.login(sp, param.get("username"), param.get("password"));
+		// 进入购物车页面
+		this.gotoShoppingCartCheckNull(sp);
+		this.goodsEditDeleteNum(sp);
+	}
+		
+
+	// 购物车中增加商品库存校验功能
+	@Test(dataProvider = "providerMethod")
+	public void addGoodNumCheckStock(Map<String, String> param)throws IOException, InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+		this.login(sp, param.get("username"), param.get("password"));
+		// 进入购物车页面
+		this.gotoShoppingCartCheckNull(sp);
+		this.goodNumCheckStock(sp);
+	}
+		
+	
+	// 未选择商品点击去结算
+	@Test(dataProvider = "providerMethod")
+	public void noGoodsToSubmit(Map<String, String> param) throws IOException,InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+		this.login(sp, param.get("username"), param.get("password"));
+		// 进入购物车页面
+		this.gotoShoppingCartCheckNull(sp);
+		this.checkNoGoodsToSubmit(sp);
+	}
+	
+
+	// 选择商品进入结算页面
+	@Test(dataProvider = "providerMethod")
+	public void oneGoodToSubmit(Map<String, String> param) throws IOException,InterruptedException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+       this.login(sp, param.get("username"), param.get("password"));
+       // 进入购物车页面
+	   this.gotoShoppingCartCheckNull(sp);
+	   this.checkOneGoodToSubmit(sp);
+	}
+	
+		
+
+	// 购物车无商品样式展示
+	@Test(dataProvider = "providerMethod")
+	public void shoppinCartNoGoods(Map<String, String> param)throws IOException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 登录
+		this.login(sp, param.get("username"), param.get("password"));
+	    //打开购物车
+		this.gotoShoppingCart(sp);
+		//校验购物车无商品样式
+		this.checkShoppingCartNull(sp);
+	}
+
+
+	// 购物车未登录样式展示
+	@Test
+	public void shoppingCartNoLogin() throws IOException {
+		ShoppingCartPage sp = new ShoppingCartPage(driver);
+		// 打开H5首页
+		openURL();
+		// 进入购物车页面
+		this.gotoShoppingCart(sp);
+		//校验购物车无商品样式
+		this.checkShoppingCartNoLogin(sp);
+	}
+
+
+	
+
 	// 判断某个元素是否存在
 	private boolean isElementExists(String path) {
 		boolean result = false;
-
 		try {
-
 			driver.findElement(By.xpath(path));
 			result = true;
 		} catch (Exception e) {
@@ -34,7 +244,7 @@ public class TestCase_03_ShoppingCart extends TestBase {
 
 		return result;
 	}
-
+ //判断某个元素是否存在
 	private boolean isElementExists(String path, WebElement scrollPath) {
 		boolean result = false;
 
@@ -48,16 +258,49 @@ public class TestCase_03_ShoppingCart extends TestBase {
 
 		return result;
 	}
-
+  //打开H5首页
 	public void openURL() {
 		try {
 			this.goTo(Config.pathURL);
+			Log.logInfo("打开首页连接=" + Config.pathURL);
+			wait(3000);
+			String log = ".//*[@id='main']/div/header/a[3]/img";
+			if (isElementExists(log)) {
+				Log.logInfo("首页打开成功");
+			} else {
+				Log.logInfo("首页打开失败");
+			}
+
 		} catch (Exception e) {
-			Log.logInfo("[购物车]  打开页面失败");
-			Assert.fail("[购物车]  打开页面失败");
+			Log.logInfo("[首页]  打开页面失败");
+			Assert.fail("[首页]  打开页面失败");
 		}
 	}
-
+	//登录
+	public void login(ShoppingCartPage sp, String username, String password) {
+		// 定位到首页的登录按钮位置
+		WebElement scrollView = sp.getElement("location");
+		this.getIntoView(scrollView);
+		Log.logInfo("定位到首页的登录按钮位置");
+		WebElement loginEntrance = sp.getElementNoWait("loginEntrance");
+		loginEntrance.click();
+		Log.logInfo("点击首页的登录按钮入口");
+		sp.getElement("userName").sendKeys(username);
+		Log.logInfo("用户名=" + username);
+		sp.getElement("password").sendKeys(password);
+		Log.logInfo("密码=" + password);
+		sp.getElementNoWait("loginButton").click();
+		Log.logInfo("点击登录按钮");
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		try {
+			driver.findElement(By.linkText("登录"));
+			Log.logInfo("登录失败");
+			Assert.fail("登录失败");
+		} catch (Exception e) {
+			Log.logInfo("登录成功后跳转回首页");
+			Assert.assertTrue(true);
+		}
+	}
 	// 查找商品
 	private ShoppingCartPage searchKey(String key) {
 		ShoppingCartPage sp = null;
@@ -71,29 +314,89 @@ public class TestCase_03_ShoppingCart extends TestBase {
 			e.printStackTrace();
 			Log.logError("[搜索] 搜索发生异常，异常信息为：" + e.getMessage() + " key=" + key);
 		}
-
+		// 判断搜索出来的结果是否为空
+				String noGoodsPath = ".//*[@id='goodslist']/div[2]";
+				if (isElementExists(noGoodsPath)) {
+					Assert.fail("未搜索到任何商品");
+				}
 		return sp;
 	}
+	
+	//检查购物车中闪购商品的展示
+	private void checkShanGouInShoppingCart(ShoppingCartPage sp) {
+		String shanGouNum = "//i[contains(text(),'闪购')]";
+		// 查找闪购商品，购物车中没有找到闪购的，则判断用例失败
+		if (isElementExists(shanGouNum)) {
+			int canNotBuyNum = sp.getElements("shanGouNum").size();
+			Log.logInfo("闪购商品的数量=" + canNotBuyNum);
+			Log.logInfo("购物车中有闪购活动的商品");
+			Log.logInfo("购物车闪购商品标签展示 测试场景通过");
+			Assert.assertTrue(true);
 
-	// 将商品从“搜索列表页”加入购物车
-	@Test(dataProvider = "providerMethod")
-	public void addToCartFromSearch(Map<String, String> param)
-			throws IOException {
-		// 打开H5首页
-		openURL();
-		// 调用搜索方法
-		ShoppingCartPage sp = searchKey(param.get("searchKey"));
-		// 判断搜索出来的结果是否为空
-		String noGoodsPath = ".//*[@id='goodslist']/div[2]";
-		if (isElementExists(noGoodsPath)) {
-			Assert.fail("未搜索到任何商品");
+		} else {
+			Log.logInfo("购物车闪购商品标签展示 测试场景不通过");
+			Assert.fail("购物车没有闪购活动的商品，请重新检查");
 		}
-		// 查找搜索结果，直到找到有库存的商品
-		String buttonXpath = findStockGoods();
-		// 调用加入购物车按钮
-		addToShoppingCartFromList(sp, buttonXpath);
 	}
-
+ //进入购物车方法-登录
+	public int gotoShoppingCartCheckNull(ShoppingCartPage sp) {
+		String numString = null;
+		// 点击首页的购物车按钮
+		// 进入购物车
+		sp.getElement("shoppingCart").click();
+		Log.logInfo("点击首页的购物车按钮");
+		//判断购物车是否为空
+		if(this.checkIfShoppingCartNull(sp))
+		{
+		 
+			numString=sp.getElement("goodsNumInShoppingCart").getText();
+		}
+		else{
+			Assert.fail("购物车为空");
+		}
+		return Integer.parseInt(numString.substring(2, 3));
+		
+	}
+	 //进入购物车方法-未登录
+		public void gotoShoppingCart(ShoppingCartPage sp) {
+			// 点击首页的购物车按钮
+			// 进入购物车
+			sp.getElement("shoppingCart").click();
+			Log.logInfo("点击首页的购物车按钮");
+		}
+	private void checkShoppingCartNull(ShoppingCartPage sp) {
+		String noGoodsText = sp.getElement("noGoodsInShoppingCart").getText();
+		if (noGoodsText.contains("购物车已经饿瘪了")) {
+			Log.logInfo(noGoodsText);
+			Log.logInfo("购物车无商品样式展示  测试场景通过");
+			Assert.assertTrue(true);
+		} else {
+			Log.logInfo("购物车无商品样式展示  测试场景不通过");
+			Assert.fail("购物车仍存在商品或者其他原因");
+		}		
+	}
+	private boolean checkIfShoppingCartNull(ShoppingCartPage sp) {
+		boolean result = false;
+		String noGoods = ".//*[@id='submitBtn']";
+		if (isElementExists(noGoods)) {
+			Log.logInfo("购物车不为空");
+			result= true;
+			
+		} else {
+			Log.logInfo("购物车为空啊啊啊啊啊");
+			result= false;
+		}	
+		return result;
+	}
+	//进入订单结算页面
+	@SuppressWarnings("unused")
+	private void gotoOrderPage(ShoppingCartPage sp)
+	{
+		String numString=sp.getElement("goodsNumInShoppingCart").getText();
+		Log.logInfo("该商品在购物车中的数量= "+numString.substring(2, 3));
+		sp.getElement("submitBtn").click();
+	}
+	//查找有库存商品方法
 	private String findStockGoods() {
 
 		int i = 1;
@@ -114,7 +417,7 @@ public class TestCase_03_ShoppingCart extends TestBase {
 		}
 	}
 
-	// 调用加入购物车按钮
+	// 从搜索列表页中调用加入购物车按钮，并比较实际加入的是否与预期的相等
 	public void addToShoppingCartFromList(ShoppingCartPage sp, String xpath) {
 		WebElement el = driver.findElement(By.xpath(xpath));
 		el.click();
@@ -122,9 +425,11 @@ public class TestCase_03_ShoppingCart extends TestBase {
 		// 点击购物车后，应提示，加入购物车成功
 		if (success.getText().contains("加入购物车成功")) {
 			// 输出加入购物车的商品名称
-			sp.getElement("fastBar").click();
+			//点击快速导航栏
+			sp.getElementNoWait("fastBar").click();
+			//点击购物车按钮
 			sp.getElement("shoppingcart").click();
-			String result = sp.getElement("submitBtn").getText();
+			String result = sp.getElement("toOrderPaySubmit").getText();
 			String num = result.substring(4, 5);
 			Log.logInfo("购物车中的商品数量= " + num);
 			if (num.equals("1")) {
@@ -141,24 +446,6 @@ public class TestCase_03_ShoppingCart extends TestBase {
 			Log.logInfo("未弹出加入购物车按钮");
 			Assert.fail();
 		}
-
-	}
-
-	@Test(dataProvider = "providerMethod")
-	public void addToShopCart(Map<String, String> param) {
-		// 打开H5首页
-		openURL();
-		// 调用搜索方法
-		ShoppingCartPage sp = searchKey(param.get("searchKey"));
-		// 判断搜索出来的结果是否为空
-		String noGoodsPath = ".//*[@id='goodslist']/div[2]";
-		if (isElementExists(noGoodsPath)) {
-			Assert.fail("未搜索到任何商品");
-		}
-		// 查找有加入购物车按钮的商品
-		goToSinglePage(sp);
-		// 调用加入购物车的方法
-		addToShoppingCartFromSingle(sp);
 
 	}
 
@@ -214,34 +501,19 @@ public class TestCase_03_ShoppingCart extends TestBase {
 			Assert.fail();
 		}
 	}
-
-	// 单品页验证商品“库存不足”
-	@Test(dataProvider = "providerMethod")
-	public void noStockSinglePageConfirm(Map<String, String> param) {
-		// 打开H5首页
-		openURL();
-		// 调用搜索方法
-		ShoppingCartPage sp = searchKey(param.get("searchKey"));
-		// 判断搜索出来的结果是否为空
-		String noGoodsPath = ".//*[@id='goodslist']/div[2]";
-		if (isElementExists(noGoodsPath)) {
-			Assert.fail("未搜索到任何商品");
-		}
-		// 查找搜索结果，直到找到没有库存的商品
-		findNoStockGoods();
-		// 无货检查
-		noStockCheck(sp);
-
-	}
-
+//搜索列表页查找无库存商品
 	private void findNoStockGoods() {
 		int i = 1;
 		while (true) {
-			String goodsXpath = ".//*[@id='goodslist']/li[" + i+ "]/a/span[2]/span[1]";
-			String goodsPrice = ".//*[@id='goodslist']/li[" + i+ "]/a/span[2]/span[3]/span/span";
-			WebElement goodsNameXpath = driver.findElement(By.xpath(goodsXpath));
+			String goodsXpath = ".//*[@id='goodslist']/li[" + i
+					+ "]/a/span[2]/span[1]";
+			String goodsPrice = ".//*[@id='goodslist']/li[" + i
+					+ "]/a/span[2]/span[3]/span/span";
+			WebElement goodsNameXpath = driver
+					.findElement(By.xpath(goodsXpath));
 
-			String cartItemPath = ".//*[@id='goodslist']/li[" + i+ "]/a/span[1]/span";
+			String cartItemPath = ".//*[@id='goodslist']/li[" + i
+					+ "]/a/span[1]/span";
 			// 查找无货商品样式显示
 			if (isElementExists(cartItemPath, goodsNameXpath)) {
 				Log.logInfo("比较了" + i + " 次，找到了没有库存的商品");
@@ -278,55 +550,8 @@ public class TestCase_03_ShoppingCart extends TestBase {
 
 		}
 	}
-
-	// 闪购商品展示
-	@Test(dataProvider = "providerMethod")
-	public void goodsShanGou(Map<String, String> param) throws IOException,
-			InterruptedException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginNow").getText();
-		Log.logInfo("未登录= " + notLoginText);
-		sp.getElement("loginNow").click();
-		sp.getElement("username").sendKeys(param.get("username"));
-		sp.getElement("password").sendKeys(param.get("password"));
-		sp.getElement("submitButton").click();
-		String shanGouNum = "//i[contains(text(),'闪购')]";
-		// 查找已下架商品，购物车中没有找到闪购的，则判断用例失败
-		if (isElementExists(shanGouNum)) {
-			int canNotBuyNum = sp.getElements("shanGouNum").size();
-			Log.logInfo("闪购商品的数量=" + canNotBuyNum);
-			Log.logInfo("购物车中没有闪购活动的商品，请重新检查");
-			Log.logInfo("购物车闪购商品标签展示 测试场景不通过");
-			Assert.assertTrue(true);
-
-		} else {
-			Log.logInfo("购物车闪购商品标签展示 测试场景不通过");
-			Assert.fail("购物车没有闪购活动的商品，请重新检查");
-		}
-
-	}
-
-	// 已下架商品展示
-	@Test(dataProvider = "providerMethod")
-	public void goodsXiaJia(Map<String, String> param) throws IOException,
-			InterruptedException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginNow").getText();
-		Log.logInfo("未登录= " + notLoginText);
-		sp.getElement("loginNow").click();
-		sp.getElement("username").sendKeys(param.get("username"));
-		sp.getElement("password").sendKeys(param.get("password"));
-		sp.getElement("submitButton").click();
+	//检查购物车中下架商品的展示
+	private void checkGoodsXiaJiaInShoppingCart(ShoppingCartPage sp) {
 		String xiaJiaNum = "//div[contains(text(),'已下架')]";
 		// 查找已下架商品，购物车中没有找到已下架字样的，则判断用例失败
 		if (isElementExists(xiaJiaNum)) {
@@ -339,30 +564,14 @@ public class TestCase_03_ShoppingCart extends TestBase {
 			Log.logInfo("购物车已下架商品展示 测试场景不通过");
 			Assert.fail("购物车没有已下架商品展示，请重新检查");
 		}
-
 	}
-
-	// 购物车页面验证商品“库存不足”
-	@Test(dataProvider = "providerMethod")
-	public void noStockCheck(Map<String, String> param) throws IOException,
-			InterruptedException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginNow").getText();
-		Log.logInfo("未登录= " + notLoginText);
-		sp.getElement("loginNow").click();
-		sp.getElement("username").sendKeys(param.get("username"));
-		sp.getElement("password").sendKeys(param.get("password"));
-		sp.getElement("submitButton").click();
+	//检查购物车中无货商品的展示
+	private void checkNoStock(ShoppingCartPage sp) {
 		String noStockNum = "//div[contains(text(),'无 货')]";
 
 		// 查找无货商品，购物车中没有找到无货字样的，则判断用例失败
 		if (isElementExists(noStockNum)) {
-			int canNotBuyNum = sp.getElements("xiaJiaNum").size();
+			int canNotBuyNum = sp.getElements("noStock").size();
 			Log.logInfo("无货商品的数量=" + canNotBuyNum);
 			Log.logInfo("购物车页面验证商品“库存不足” 测试场景通过");
 			Assert.assertTrue(true);
@@ -372,82 +581,127 @@ public class TestCase_03_ShoppingCart extends TestBase {
 			Log.logInfo("购物车页面验证商品“库存不足” 测试场景不通过");
 			Assert.fail("购物车中没有无库存的商品，请重新检查");
 		}
-
 	}
-	// 购物车中编辑单个商品-删除商品
-			@Test(dataProvider = "providerMethod")
-			public void oneGoodsEditDelete(Map<String, String> param) throws IOException,InterruptedException {
-				// 打开H5首页
-				openURL();
-				// 进入购物车页面
-				ShoppingCartPage sp = new ShoppingCartPage(driver);
-				sp.getElement("shoppingcartInFirstPage").click();
-				// 判断未登录的购物车的样式展示
-				String notLoginText = sp.getElement("loginNow").getText();
-				Log.logInfo("未登录= " + notLoginText);
-				sp.getElement("loginNow").click();
-				sp.getElement("username").sendKeys(param.get("username"));
-				sp.getElement("password").sendKeys(param.get("password"));
-				sp.getElement("submitButton").click();
-				//WebElement submitBtn = sp.getElement("toOrderPaySubmit");
-				int cartGoodsNum =  this.getCartNum(sp);
-				Log.logInfo("当前购物车中有商品数量= " + cartGoodsNum);
-				if (cartGoodsNum <= 0) {
-					Log.logError("购物车中没有可编辑的商品");
-					Assert.fail("购物车中没有可编辑的商品");
-					return;
-				} else {
-					// 点击购物车中某个商品的编辑按钮
-					String canNotBuy = "//div[@class='cart-show-list']/div/label/img[@name='canNotBuyImg']";
-					if (!isElementExists(canNotBuy)) {
-						//获取实际的商品数量
-						List<WebElement> actualGoodsNum =this.getActualCartNum(sp);
-						//获取checkbox
-						List<WebElement> checkbox = this.getAllCheckBox(sp);
-						for (int i = 0; i < actualGoodsNum.size(); i++) {
-							if (checkbox.get(i).getAttribute("canbuy").equals("yes")) {
-								Log.logInfo("当前找到的商品正常的商品，可以编辑");
-								sp.getElement("GoodsEdit").click();
-								actualGoodsNum.get(i).findElement(By.xpath("//div/div[2]/div[4]/div/div[1]/div[1]")).click();
-								actualGoodsNum.get(i).findElement(By.xpath("//div/div[2]/div[4]/div/div[1]/div[2]")).click();
-								wait(3000);
-								int cartGoodNumNow =  this.getCartNum(sp);
-								Log.logInfo("当前购物车中有商品数量= " + cartGoodNumNow);
-								if ((cartGoodsNum-cartGoodNumNow) == 1) {
-									Log.logInfo("购物车中编辑单个商品-删除  测试场景通过");
-									Assert.assertTrue(true);
-								} else {
-									Log.logInfo("购物车中编辑单个商品-删除  测试场景不通过");
-									Assert.fail();
-								}
-								break;
-							} else {
-								continue;
-							}
+
+	// 正则方法取购物车中可结算的商品数量
+	public int getCartNum(ShoppingCartPage sp) {
+		String cartNum = null;
+		// 提取数字
+		WebElement submitBtn = sp.getElement("toOrderPaySubmit");
+		cartNum = submitBtn.getText();
+		int num = Integer.parseInt(Pattern.compile("[^0-9]").matcher(cartNum)
+				.replaceAll(""));
+		return num;
+	}
+
+	// 取购物车中真正的的商品数量，包括已下架，无货等
+	public List<WebElement> getActualCartNum(ShoppingCartPage sp) {
+		List<WebElement> actualGoodsNum = sp.getElements("actualGoodsNum");
+		return actualGoodsNum;
+	}
+
+	// 获取所有的checkbox
+	public List<WebElement> getAllCheckBox(ShoppingCartPage sp) {
+		List<WebElement> actualGoodsNum = sp.getElements("goodCheckBox");
+		return actualGoodsNum;
+	}
+	 private boolean isExistEditGoods(ShoppingCartPage sp)
+	    {
+	    	int cartGoodsNum = this.getCartNum(sp);
+			Log.logInfo("当前购物车中有商品数量= " + cartGoodsNum);
+			if (cartGoodsNum <= 0) {
+				Log.logError("购物车中没有可编辑的商品");
+				Assert.fail("购物车中没有可编辑的商品");
+				return false;
+			}
+			else{
+				return true;
+			}
+	    }
+
+	// 检查删除商品
+	private void deleteOneGoods(ShoppingCartPage sp) {
+		// 点击购物车中某个商品的编辑按钮
+		String canNotBuy = "//div[@class='cart-show-list']/div/label/img[@name='canNotBuyImg']";
+		if (!isElementExists(canNotBuy)) {
+			// 获取实际的商品数量
+			List<WebElement> actualGoodsNum = this.getActualCartNum(sp);
+			// 获取checkbox数量，即为可编辑
+			List<WebElement> checkbox = this.getAllCheckBox(sp);
+			for (int i = 0; i < actualGoodsNum.size(); i++) {
+				// 如果当前购物车中仅有一件商品，点击删除后购物车将显示无商品
+				if (actualGoodsNum.size() == 1) {
+					if (checkbox.get(i).getAttribute("canbuy").equals("yes")) {
+						Log.logInfo("当前找到的商品正常的商品，可以编辑");
+						sp.getElement("GoodsEdit").click();
+						actualGoodsNum
+								.get(i)
+								.findElement(
+										By.xpath("//div/div[2]/div[4]/div/div[1]/div[1]"))
+								.click();
+						actualGoodsNum
+								.get(i)
+								.findElement(
+										By.xpath("//div/div[2]/div[4]/div/div[1]/div[2]"))
+								.click();
+						wait(3000);
+						if (this.checkIfShoppingCartNull(sp)) {
+							Log.logInfo("删除购物车中仅有的一件商品后，购物车显示空标志");
+						} else {
+							Log.logInfo("删除购物车中仅有的一件商品后，购物车未显示空标志");
 						}
+						return;
+					} else {
+						continue;
 					}
 
+				} else {
+					if (checkbox.get(i).getAttribute("canbuy").equals("yes")) {
+						Log.logInfo("当前找到的商品正常的商品，可以编辑");
+						// 获取购物车中当前的商品数量
+						int cartGoodNumBefore = this.getCartNum(sp);
+						Log.logInfo("当前商品数量= " + cartGoodNumBefore);
+						sp.getElement("GoodsEdit").click();
+						wait(1000);
+						// 预期要删除的商品数量
+						String deleteNumString = driver
+								.findElement(
+										By.xpath("//div[@class='cart-show-list']["
+												+ (i + 1)
+												+ "]//div[@class='f-img-w'][1]/div[2]/div[4]/div[1]/div[2]/div[1]/div[2]/input"))
+								.getAttribute("value");
+						Log.logInfo("要删除的商品数量= " + deleteNumString);
+						int deleteNum = Integer.parseInt(deleteNumString);
+						actualGoodsNum
+								.get(i)
+								.findElement(
+										By.xpath("//div/div[2]/div[4]/div/div[1]/div[1]"))
+								.click();
+						actualGoodsNum
+								.get(i)
+								.findElement(
+										By.xpath("//div/div[2]/div[4]/div/div[1]/div[2]"))
+								.click();
+						wait(3000);
+						int cartGoodNumAfter = this.getCartNum(sp);
+						Log.logInfo("当前商品数量= " + cartGoodNumAfter);
+						if ((cartGoodNumBefore - deleteNum) == cartGoodNumAfter) {
+							Log.logInfo("删除成功,购物车剩余商品数量与预期相等");
+						} else {
+							Log.logInfo(",购物车剩余商品数量与预期相等");
+						}
+						return;
+					}
 				}
 
 			}
-	// 购物车中编辑单个商品-增加商品数量
-	@Test(dataProvider = "providerMethod")
-	public void oneGoodsEditAddNum(Map<String, String> param) throws IOException,
-			InterruptedException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginNow").getText();
-		Log.logInfo("未登录= " + notLoginText);
-		sp.getElement("loginNow").click();
-		sp.getElement("username").sendKeys(param.get("username"));
-		sp.getElement("password").sendKeys(param.get("password"));
-		sp.getElement("submitButton").click();
-		//WebElement submitBtn = sp.getElement("toOrderPaySubmit");
-		int cartGoodsNum =  this.getCartNum(sp);
+		}
+
+	}
+
+	// 检查增加商品数量
+	private void goodsEditAddNum(ShoppingCartPage sp) {
+		int cartGoodsNum = this.getCartNum(sp);
 		Log.logInfo("当前购物车中有商品数量= " + cartGoodsNum);
 		if (cartGoodsNum <= 0) {
 			Log.logError("购物车中没有可编辑的商品");
@@ -458,15 +712,23 @@ public class TestCase_03_ShoppingCart extends TestBase {
 			String canNotBuy = "//div[@class='cart-show-list']/div/label/img[@name='canNotBuyImg']";
 			if (!isElementExists(canNotBuy)) {
 				List<WebElement> actualGoodsNum = this.getActualCartNum(sp);
-				List<WebElement> checkbox =this.getAllCheckBox(sp);
+				List<WebElement> checkbox = this.getAllCheckBox(sp);
 				for (int i = 0; i < actualGoodsNum.size(); i++) {
 					if (checkbox.get(i).getAttribute("canbuy").equals("yes")) {
 						Log.logInfo("当前找到的商品正常的商品，可以编辑");
 						sp.getElement("GoodsEdit").click();
-						actualGoodsNum.get(i).findElement(By.xpath("//div/div[2]/div[4]/div/div[2]/div[1]/div[3]/img")).click();
-						actualGoodsNum.get(i).findElement(By.xpath("//div/div[2]/div[4]/div/div[1]/div[2]")).click();
+						actualGoodsNum
+								.get(i)
+								.findElement(
+										By.xpath("//div/div[2]/div[4]/div/div[2]/div[1]/div[3]/img"))
+								.click();
+						actualGoodsNum
+								.get(i)
+								.findElement(
+										By.xpath("//div/div[2]/div[4]/div/div[1]/div[2]"))
+								.click();
 						wait(3000);
-						int cartGoodNumNow =  this.getCartNum(sp);
+						int cartGoodNumNow = this.getCartNum(sp);
 						Log.logInfo("当前购物车中有商品数量= " + cartGoodNumNow);
 						if ((cartGoodNumNow - cartGoodsNum) == 1) {
 
@@ -486,100 +748,62 @@ public class TestCase_03_ShoppingCart extends TestBase {
 			}
 
 		}
-
 	}
-	// 购物车中编辑单个商品-减少商品数量
-		@Test(dataProvider = "providerMethod")
-		public void oneGoodsEditDeleteNum(Map<String, String> param) throws IOException,
-				InterruptedException {
-			// 打开H5首页
-			openURL();
-			// 进入购物车页面
-			ShoppingCartPage sp = new ShoppingCartPage(driver);
-			sp.getElement("shoppingcartInFirstPage").click();
-			// 判断未登录的购物车的样式展示
-			String notLoginText = sp.getElement("loginNow").getText();
-			Log.logInfo("未登录= " + notLoginText);
-			sp.getElement("loginNow").click();
-			sp.getElement("username").sendKeys(param.get("username"));
-			sp.getElement("password").sendKeys(param.get("password"));
-			sp.getElement("submitButton").click();
-			//WebElement submitBtn = sp.getElement("toOrderPaySubmit");
-			int cartGoodsNum =  this.getCartNum(sp);
-			Log.logInfo("当前购物车中有商品数量= " + cartGoodsNum);
-			if (cartGoodsNum <= 0) {
-				Log.logError("购物车中没有可编辑的商品");
-				Assert.fail("购物车中没有可编辑的商品");
-				return;
-			} else {
-				// 点击购物车中某个商品的编辑按钮
-				String canNotBuy = "//div[@class='cart-show-list']/div/label/img[@name='canNotBuyImg']";
-				if (!isElementExists(canNotBuy)) {
-					List<WebElement> actualGoodsNum = this.getActualCartNum(sp);
-					List<WebElement> checkbox = this.getAllCheckBox(sp);
-					for (int i = 0; i < actualGoodsNum.size(); i++) {
-						if (checkbox.get(i).getAttribute("canbuy").equals("yes")) {
-							Log.logInfo("当前找到的商品正常的商品，可以编辑");
-							sp.getElement("GoodsEdit").click();
-							actualGoodsNum.get(i).findElement(By.xpath("//div/div[2]/div[4]/div/div[2]/div[1]/div[1]/img")).click();
-							actualGoodsNum.get(i).findElement(By.xpath("//div/div[2]/div[4]/div/div[1]/div[2]")).click();
-							wait(3000);
-							int cartGoodNumNow = this.getCartNum(sp);
-							Log.logInfo("当前购物车中有商品数量= " + cartGoodNumNow);
-							if ((cartGoodsNum-cartGoodNumNow) == 1) {
-								Log.logInfo("购物车中编辑单个商品-减少商品数量  测试场景通过");
-								Assert.assertTrue(true);
-							} else {
-								Log.logInfo("购物车中编辑单个商品-减少商品数量  测试场景不通过");
-								Log.logInfo("当前购物车中有商品数量= " + cartGoodNumNow);
-								Assert.fail();
 
-							}
-							break;
+	// 检查删除商品数量
+	private void goodsEditDeleteNum(ShoppingCartPage sp) {
+		int cartGoodsNum = this.getCartNum(sp);
+		Log.logInfo("当前购物车中有商品数量= " + cartGoodsNum);
+		if (cartGoodsNum <= 0) {
+			Log.logError("购物车中没有可编辑的商品");
+			Assert.fail("购物车中没有可编辑的商品");
+			return;
+		} else {
+			// 点击购物车中某个商品的编辑按钮
+			String canNotBuy = "//div[@class='cart-show-list']/div/label/img[@name='canNotBuyImg']";
+			if (!isElementExists(canNotBuy)) {
+				List<WebElement> actualGoodsNum = this.getActualCartNum(sp);
+				List<WebElement> checkbox = this.getAllCheckBox(sp);
+				for (int i = 0; i < actualGoodsNum.size(); i++) {
+					if (checkbox.get(i).getAttribute("canbuy").equals("yes")) {
+						Log.logInfo("当前找到的商品正常的商品，可以编辑");
+						sp.getElement("GoodsEdit").click();
+						actualGoodsNum
+								.get(i)
+								.findElement(
+										By.xpath("//div/div[2]/div[4]/div/div[2]/div[1]/div[1]/img"))
+								.click();
+						actualGoodsNum
+								.get(i)
+								.findElement(
+										By.xpath("//div/div[2]/div[4]/div/div[1]/div[2]"))
+								.click();
+						wait(3000);
+						int cartGoodNumNow = this.getCartNum(sp);
+						Log.logInfo("当前购物车中有商品数量= " + cartGoodNumNow);
+						if ((cartGoodsNum - cartGoodNumNow) == 1) {
+							Log.logInfo("购物车中编辑单个商品-减少商品数量  测试场景通过");
+							Assert.assertTrue(true);
 						} else {
-							continue;
+							Log.logInfo("购物车中编辑单个商品-减少商品数量  测试场景不通过");
+							Log.logInfo("当前购物车中有商品数量= " + cartGoodNumNow);
+							Assert.fail();
+
 						}
+						break;
+					} else {
+						continue;
 					}
 				}
-
 			}
 
 		}
-	// 正则方法取购物车中可结算的商品数量
-	public int getCartNum(ShoppingCartPage sp) {
-		// 提取数字
+	}
+
+	// 检查加入购物车库存校验
+	private void goodNumCheckStock(ShoppingCartPage sp) {
 		WebElement submitBtn = sp.getElement("toOrderPaySubmit");
-		String cartNum=submitBtn.getText();
-		return Integer.parseInt(Pattern.compile("[^0-9]").matcher(cartNum).replaceAll(""));
-	}
-	// 取购物车中真正的的商品数量，包括已下架，无货等
-	public List<WebElement> getActualCartNum(ShoppingCartPage sp ){
-		List<WebElement> actualGoodsNum = sp.getElements("actualGoodsNum");
-	    return actualGoodsNum;
-	}
-	//获取所有的checkbox
-	public List<WebElement> getAllCheckBox(ShoppingCartPage sp ){
-		List<WebElement> actualGoodsNum = sp.getElements("goodCheckBox");
-	    return actualGoodsNum;
-	}
-	// 购物车中增加商品库存校验功能
-	@Test(dataProvider = "providerMethod")
-	public void addGoodNumCheckStock(Map<String, String> param)
-			throws IOException, InterruptedException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginNow").getText();
-		Log.logInfo("未登录= " + notLoginText);
-		sp.getElement("loginNow").click();
-		sp.getElement("username").sendKeys(param.get("username"));
-		sp.getElement("password").sendKeys(param.get("password"));
-		sp.getElement("submitButton").click();
-		WebElement submitBtn = sp.getElement("toOrderPaySubmit");
-		int submitNum =  this.getCartNum(sp);
+		int submitNum = this.getCartNum(sp);
 		Log.logInfo("当前购物车中有商品数量= " + submitNum);
 		if (submitNum <= 0) {
 			Log.logError("购物车中没有可下单的商品");
@@ -600,25 +824,9 @@ public class TestCase_03_ShoppingCart extends TestBase {
 				Assert.fail();
 			}
 		}
-
 	}
-
-	// 未选择商品点击去结算
-	@Test(dataProvider = "providerMethod")
-	public void noGoodsToSubmit(Map<String, String> param) throws IOException,
-			InterruptedException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginNow").getText();
-		Log.logInfo("未登录= " + notLoginText);
-		sp.getElement("loginNow").click();
-		sp.getElement("username").sendKeys(param.get("username"));
-		sp.getElement("password").sendKeys(param.get("password"));
-		sp.getElement("submitButton").click();
+  //检查不选择商品去结算
+	private void checkNoGoodsToSubmit(ShoppingCartPage sp) {
 		WebElement submitBtn = sp.getElement("toOrderPaySubmit");
 		int submitNum = Integer.parseInt(submitBtn.getText().substring(4, 5));
 		Log.logInfo("当前购物车中有商品数量= " + submitNum);
@@ -650,25 +858,28 @@ public class TestCase_03_ShoppingCart extends TestBase {
 				return;
 			}
 		}
+	}
+	private void checkShoppingCartNoLogin(ShoppingCartPage sp) {
+		// 判断未登录的购物车的样式展示
+		String notLoginText = sp.getElement("loginRightNow").getText();
+		String notLoginURL = sp.getElement("loginNow").getAttribute("href");
+		Log.logInfo("未登录= " + notLoginText);
+		Log.logInfo("未登录= " + notLoginURL);
+		Log.logInfo(driver.findElement(By.xpath("html/body/div[2]/div[2]"))
+				.getText());
+		Log.logInfo(driver.findElement(By.xpath("html/body/div[2]/div[3]/a"))
+				.getText());
+		if (notLoginText.contains("立即登录")) {
+			Log.logInfo("购物车未登录样式展示  测试场景通过");
+			Assert.assertTrue(true);
+		} else {
+			Log.logInfo("购物车未登录样式展示  测试场景不通过");
+			Assert.fail();
+		}
 
 	}
-
-	// 选择商品进入结算页面
-	@Test(dataProvider = "providerMethod")
-	public void oneGoodToSubmit(Map<String, String> param) throws IOException,
-			InterruptedException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginNow").getText();
-		Log.logInfo("未登录= " + notLoginText);
-		sp.getElement("loginNow").click();
-		sp.getElement("username").sendKeys(param.get("username"));
-		sp.getElement("password").sendKeys(param.get("password"));
-		sp.getElement("submitButton").click();
+	//购物车选择商品进入结算页
+	private void checkOneGoodToSubmit(ShoppingCartPage sp) {
 		WebElement submitBtn = sp.getElement("toOrderPaySubmit");
 		int submitNum = Integer.parseInt(submitBtn.getText().substring(4, 5));
 		Log.logInfo("当前购物车中有商品数量= " + submitNum);
@@ -702,63 +913,35 @@ public class TestCase_03_ShoppingCart extends TestBase {
 				Log.logInfo("进入订单确认页失败\n 选择商品进入结算页面 测试场景不通过");
 				Assert.fail();
 			}
-		}
+		
 
 	}
-
-	// 购物车无商品样式展示
-	@Test(dataProvider = "providerMethod")
-	public void shoppinCartNoGoods(Map<String, String> param)
-			throws IOException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginNow").getText();
-		Log.logInfo("未登录= " + notLoginText);
-		// 登录购物车
-		sp.getElement("loginNow").click();
-		sp.getElement("username").sendKeys(param.get("username"));
-		sp.getElement("password").sendKeys(param.get("password"));
-		sp.getElement("submitButton").click();
-		String noGoodsText = sp.getElement("noGoodsInShoppingCart").getText();
-		if (noGoodsText.contains("购物车已经饿瘪了")) {
-			Log.logInfo(noGoodsText);
-			Log.logInfo("购物车无商品样式展示  测试场景通过");
-			Assert.assertTrue(true);
-		} else {
-			Log.logInfo("购物车无商品样式展示  测试场景不通过");
-			Assert.fail();
+}
+	//如果购物车不为空，则清空购物车
+	private void initData(ShoppingCartPage sp,Map<String,String> param) {
+		// 点击首页的购物车按钮
+		sp.getElement("shoppingCart").click();
+		Log.logInfo("点击首页的购物车按钮");
+		String path="html/body/div[1]/div[2]";
+		wait(3000);
+		WebElement nullGoods=driver.findElement(By.xpath("html/body/div[1]/div[2]"));
+		if(nullGoods.isDisplayed())
+		{
+			return;
+		}else{
+			//清空购物车
+			Log.logInfo("清空购物车");
+			sp.getElement("editAll").click();
+			sp.getElement("deleteBtn").click();
+			sp.getElement("Completed").click();
+			
 		}
 	}
-
-	// 购物车未登录样式展示
-	@Test
-	public void shoppingCartNoLogin() throws IOException {
-		// 打开H5首页
-		openURL();
-		// 进入购物车页面
-		ShoppingCartPage sp = new ShoppingCartPage(driver);
-		sp.getElement("shoppingcartInFirstPage").click();
-		// 判断未登录的购物车的样式展示
-		String notLoginText = sp.getElement("loginRightNow").getText();
-		String notLoginURL = sp.getElement("loginNow").getAttribute("href");
-		Log.logInfo("未登录= " + notLoginText);
-		Log.logInfo("未登录= " + notLoginURL);
-		Log.logInfo(driver.findElement(By.xpath("html/body/div[2]/div[2]"))
-				.getText());
-		Log.logInfo(driver.findElement(By.xpath("html/body/div[2]/div[3]/a"))
-				.getText());
-		if (notLoginText.contains("立即登录")) {
-			Log.logInfo("购物车未登录样式展示  测试场景通过");
-			Assert.assertTrue(true);
-		} else {
-			Log.logInfo("购物车未登录样式展示  测试场景不通过");
-			Assert.fail();
+	//进入首页
+	private void gotoFirstPage(ShoppingCartPage sp) {
+	     sp.getElement("fastMenu").click();
+	     sp.getElement("firstPage").click();
 		}
-
-	}
 
 }
+

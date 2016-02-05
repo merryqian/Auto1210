@@ -1,3 +1,12 @@
+location:
+  type:xpath
+  value:".//*[@id='mySwipe2']/div/div/a/img"
+loginEntrance:
+  type:xpath
+  value:".//*[@id='main']/div/section[4]/div/a"
+logo:
+  type:xpath
+  value:"html/body/main/div[1]/a/img"
 search:
   type:xpath
   value:".//*[@id='main']/div/header/div"
@@ -42,7 +51,7 @@ shoppingcartSingle:
   value:"html/body/div[1]/div[2]/nav/ul/li[4]/a/p"
 noStock:
   type:xpath
-  value:".//*[@id='productStor']"
+  value:"//div[contains(text(),'无 货')]"
 shoppingcartInFirstPage:
   type:xpath
   value:".//*[@id='main']/div/header/a[1]"
@@ -52,13 +61,13 @@ loginRightNow:
 loginNow:
   type:xpath
   value:"html/body/div[1]/a"
-username:
+userName:
   type:id
   value:lgoinName
 password:
   type:id
   value:pwd
-submitButton:
+loginButton:
   type:id
   value:loginButton
 noGoodsInShoppingCart:
@@ -109,4 +118,27 @@ goodCheckBox:
 canNotBuyImg:
   type:xpath
   value:"//div[@class='cart-show-list']/div/label/img[@name='canNotBuyImg']"
-  
+goodsNum:
+  type:xpath
+  value:"//div[@class='cart-show-list'][2]/div/div/div/div/div/span"
+goodsNumInShoppingCart:
+  type:xpath
+  value:"//div/div[2]/div[2]/div[2]"
+shoppingCart:
+  type:xpath
+  value:".//*[@id='main']/div/header/a[1]"
+notHasProductContext:
+  type:xpath
+  value:".//*[@id='notHasProductContext']/div[2]"
+editAll:
+  type:xpath
+  value:"html/body/header/div/a[2]"
+deleteBtn:
+  type:id
+  value:deleteBtn
+fastMenu:
+  type:xpath
+  value:"html/body/header/div/a[1]/span"
+firstPage:
+  type:xpath
+  value:"html/body/header/div/nav/ul/li[1]/a/i"

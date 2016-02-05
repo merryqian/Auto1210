@@ -1,6 +1,6 @@
 H5Load:
-  type:xpath
-  value:"html/body/div[1]/div[2]/p"
+  type:id
+  value:addButton
 ScrollView:
   type:xpath
   value:""
@@ -12,22 +12,22 @@ GoodName:
   value:".//*[@id='scroller']/div[4]/div[1]/a"
 GoodPrice:
   type:xpath
-  value:".//*[@id='scroller']/div[4]/div[2]/span"
+  value:".//*[@id='scroller']/div[4]/div[3]/span"
 GoodNoEvalute:
   type:xpath
-  value:".//*[@id='scroller']/div[8]/div[2]"
+  value:".//*[@id='scroller']/div[7]/div[2]"
 GoodEvaluate:
   type:xpath
   value:".//*[@id='scroller']/div[8]/div[1]"
 GoodMark:
   type:xpath
-  value:".//*[@id='scroller']/div[8]/div[1]/div[2]"
+  value:".//*[@id='scroller']/div[7]/div[1]"
 GoodStar:
   type:xapth
-  value:".//*[@id='scroller']/div[8]/div[1]/div[3]/div"
+  value:".//*[@id='scroller']/div[7]/div[1]/div[2]"
 GoodEvaCount:
   type:xpath
-  value:".//*[@id='scroller']/div[8]/div[1]/div[4]/a"
+  value:".//*[@id='scroller']/div[7]/div[1]/div[4]/a"
 GoodPromotion:
   type:xpath
   value:".//*[@id='scroller']/div[5]/div[1]"
@@ -51,28 +51,28 @@ CustomerService:
   value:".//*[@id='scroller']/div[6]/div[1]"
 ServiceContent:
   type:xpath
-  value:".//*[@id='scroller']/div[6]/div[2]/div[1]"
+  value:".//*[@id='scroller']/div[5]/div[2]/div[1]"
 SupplierCheckBySelf:
   type:xpath
   value:".//*[@id='scroller']/div[4]/div[1]/a/i"
 TakeBySelf:
   type:xpath
-  value:".//*[@id='scroller']/div[6]/div[2]/div[2]/div/span"
-ReturnOrChangeGoods:
+  value:"//span[contains(text(),'支持自提')]"
+ReturnOrChangeGoodsNotSupported:
   type:xpath
-  value:".//*[@id='scroller']/div[6]/div[2]/div[3]/div/span"
+  value:"//span[contains(text(),'不支持7天无理由退换货')]"
 ReturnOrChangeGoodsSupported:
-  type:xpath
-  value:".//*[@id='scroller']/div[6]/div[2]/div[2]/div/span"
+  type:css
+  value:.height-2>div>span
 CODSupport:
-  type:xpath
-  value:".//*[@id='scroller']/div[6]/div[2]/div[2]/div/span"
+  type:css
+  value:.height-1>div>span
 Chooice:
   type:xpath
-  value:".//*[@id='scroller']/div[7]/div[1]"
+  value:"//div[contains(text(),'选择')]"
 Specification:
   type:xpath
-  value:".//*[@id='scroller']/div[7]/div[2]/i"
+  value:"//div[contains(text(),'选择')]"
 Red:
   type:xpath
   value:".//*[@id='totalAtrbuteTypeIdx_172']"
@@ -117,7 +117,13 @@ GoodRecommend:
   value:".//*[@id='scroller']/div[9]"
 RecommendGoodsList:
   type:xpath
-  value:".//*[@id='scroller']/div[10]/div/ul/li"
+  value:".//*[@id='scroller']/div[9]/div/ul/li"
 RecommendGoodsName:
   type:xpath
   value:"/div/div[2]/a"
+detailsImg:
+  type:xpath
+  value:".//*[@id='__01']/tbody/tr[1]/td/img"
+Completed:
+  type:xpath
+  value:"html/body/header/div/a[2]"

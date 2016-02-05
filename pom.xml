@@ -3,6 +3,7 @@
   <groupId>com.merry</groupId>
   <artifactId>ExcelTest</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
    <dependencies>
  
     <dependency>
@@ -51,6 +52,11 @@
 	<version>1.4</version>
 </dependency>
 <dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-log4j12</artifactId>
+	<version>1.7.13</version>
+</dependency>
+<dependency>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-ant-tasks</artifactId>
     <version>2.0.9</version>
@@ -95,5 +101,57 @@
 <artifactId>xml-apis</artifactId>
 <version>1.4.01</version>
 </dependency>
+<dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-api</artifactId>
+	<version>1.7.13</version>
+</dependency>
+    <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+	<groupId>org.json</groupId>
+	<artifactId>json</artifactId>
+	<version>20151123</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-antrun-plugin</artifactId>
+	<version>1.8</version>
+</dependency>
+
+ <plugin>
+      <artifactId>maven-antrun-plugin</artifactId> 
+      <version>1.8</version>
+      <executions>  
+        <execution>
+        <id>package</id>
+        <phase>package</phase>
+        <goals>
+         <goal>run</goal>
+        </goals>
+         <configuration>
+           <tasks>
+             <ant antfile="build.xml" target="run"></ant>
+           </tasks>
+         </configuration>
+       </execution>
+      </executions>
+    </plugin>
+    
   </dependencies>
 </project>

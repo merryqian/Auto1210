@@ -1,0 +1,37 @@
+﻿<project  name ="jgroups"  basedir ="."  xmlns:artifact  ="urn:maven-artifact-ant"> 
+     <!--  存放依赖包的目录  --> 
+     <property  name ="build.lib.dir"  location ="./lib"/> 
+     <!--  find maven-ant-tasks, you can use classpathref to specify the jar, or just copy the jar to ant/lib   --> 
+     <typedef   resource  ="org/apache/maven/artifact/ant/antlib.xml"   uri ="urn:maven-artifact-ant"/> 
+     <!--  maven的文件  --> 
+     <artifact:pom   id  ="maven.project"   file  ="pom.xml"/> 
+     <artifact:dependencies  filesetId ="deps.fileset.compile"  useScope ="compile"> 
+         <!-- <pom file="pom.xml"/> --> 
+         <pom  refid ="maven.project"/> 
+     </artifact:dependencies> 
+     <artifact:dependencies  filesetId ="deps.fileset.test"  scopes ="test"> 
+         <pom  refid ="maven.project"/> 
+     </artifact:dependencies> 
+     <artifact:dependencies  filesetId ="deps.fileset.provide"  scopes ="provide"> 
+         <pom  refid ="maven.project"/> 
+     </artifact:dependencies> 
+     <target  name ="lib.init"> 
+         <copy  todir ="${build.lib.dir}/compile"> 
+             <fileset  refid ="deps.fileset.compile"/> 
+             <mapper  type ="flatten"/> 
+         </copy> 
+         <copy  todir ="${build.lib.dir}/test"> 
+             <fileset  refid ="deps.fileset.test"/> 
+             <mapper  type ="flatten"/> 
+         </copy> 
+         <copy  todir ="${build.lib.dir}/provide"> 
+             <fileset  refid ="deps.fileset.test"/> 
+             <mapper  type ="flatten"/> 
+         </copy> 
+     </target> 
+
+
+     <!--   ..其他 ..      --> 
+
+
+</project> 

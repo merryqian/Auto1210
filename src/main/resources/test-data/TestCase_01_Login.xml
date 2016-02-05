@@ -1,18 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
 	<common>	
-	http://m.st.bl.com/h5-web/page/view_Index.html			
+	http://m.bl.com/h5-web/page/view_Index.html			
 	</common>
+	<loginH5Logo>
+	    <logoExpected>http://m.st.bl.com/h5-web/ui/h5resource/css/i/logo-1.png</logoExpected>
+	</loginH5Logo>
+	<userNameDefaultText>
+	    <expectText>用户名/手机/邮箱/百联通会员卡</expectText>
+	</userNameDefaultText>
+	<userPasswordDefaultText>
+	    <expectedText>请输入密码</expectedText>
+	</userPasswordDefaultText>
+	<forgetPasswordLink>
+	    <logoExpected>http://m.st.bl.com/h5-web/member/forgetPassword.do</logoExpected>
+	</forgetPasswordLink>
+	<freeRegisterLink>
+	    <expectedURL>http://m.st.bl.com/h5-web/member/memberRegister_viewStepOne.html</expectedURL>
+	    <title>注册</title>
+	</freeRegisterLink>
+	<solidCardLoginLink>
+	    <expectedText>百联通会员卡首次登录</expectedText>
+	    <expectedURL>http://m.st.bl.com/h5-web/member/forgetPassword.do?memberCard=1</expectedURL>
+	    <title>百联通会员卡首次登录</title>
+	</solidCardLoginLink>
 	<wrongPasswordAlert>
 	    <username>18516042869</username>
 	    <password>435345</password>
+	    <expectedAlert>用户名或者密码错误!</expectedAlert>
 	</wrongPasswordAlert>
 	<usernameNotExist>
 	     <username>1851604200</username>
 	    <password>435345</password>
+	    <expectedAlert>此账号不存在!</expectedAlert>
 	</usernameNotExist>
 	<loginSuccess>
 	    <username>18516042869</username>
-	    <password>wobugaosuni1</password> 
+	    <password>donkey1987</password> 
 	</loginSuccess>
+	<solidCardLogin>
+	    <username>020230000003029</username>
+	    <password>donkey1987</password>
+	    <expectURL>http://m.st.bl.com/h5-web/page/view_Index.html</expectURL>
+	</solidCardLogin>
 </data>
